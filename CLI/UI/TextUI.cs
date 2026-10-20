@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace CLI.UI;
 
-public class TextUI(IngredientService ingredientService)
+public class TextUI(IngredientService ingredientService, MealService mealService)
 {
     public async Task RunAsync()
     {

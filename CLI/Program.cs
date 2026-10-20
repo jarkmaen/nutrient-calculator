@@ -7,6 +7,7 @@ var apiBaseUrl = configuration["ApiBaseUrl"] ?? throw new InvalidOperationExcept
 
 var httpClient = new HttpClient { BaseAddress = new Uri(apiBaseUrl) };
 var ingredientService = new IngredientService(httpClient);
-var textUI = new TextUI(ingredientService);
+var mealService = new MealService(httpClient);
+var textUI = new TextUI(ingredientService, mealService);
 
 await textUI.RunAsync();
