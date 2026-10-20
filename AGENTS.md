@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents when working with code in this repository.
 
 ## Overview
 
@@ -11,7 +11,7 @@ Nutrient Calculator is a single-page app: select meals and see their combined ma
 - `Frontend/` — React 19, TypeScript, Vite, Tailwind v4, React Compiler. Not part of the solution.
 - `CLI/` — console app for adding and listing ingredients over HTTP.
 - `Tests/` — Reqnroll (Gherkin) on xUnit, referencing `Backend`.
-- `.claude/skills/` — `add-ingredient` (from a pasted product page) and `add-meal`.
+- `.agents/skills/` — `add-ingredient` (from a pasted product page) and `add-meal`.
 
 ## Commands
 
