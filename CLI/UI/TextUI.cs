@@ -110,7 +110,7 @@ public class TextUI(IngredientService ingredientService)
             {
                 foreach (var ingredient in ingredients)
                 {
-                    Console.WriteLine(ingredient.Name);
+                    Console.WriteLine($"{ingredient.Id,3}  {ingredient.Name}");
                 }
             }
         }
