@@ -15,7 +15,8 @@ public class TextUI(IngredientService ingredientService, MealService mealService
             Console.WriteLine();
             Console.WriteLine("1. add ingredient");
             Console.WriteLine("2. list ingredients");
-            Console.WriteLine("3. exit");
+            Console.WriteLine("3. add meal");
+            Console.WriteLine("4. exit");
             Console.WriteLine();
             Console.Write("> ");
 
@@ -29,7 +30,11 @@ public class TextUI(IngredientService ingredientService, MealService mealService
             {
                 await ListIngredientsAsync();
             }
-            else if (choice == "3" || choice == null)
+            else if (choice == "3")
+            {
+                await AddMealAsync();
+            }
+            else if (choice == "4" || choice == null)
             {
                 break;
             }
@@ -92,6 +97,72 @@ public class TextUI(IngredientService ingredientService, MealService mealService
         Console.ReadKey();
     }
 
+    private async Task AddMealAsync()
+    {
+        Console.Clear();
+        Console.WriteLine("nutrient calculator > add meal");
+        Console.WriteLine();
+
+        string name = ReadString("name     : ");
+        int servings = ReadInt("servings : ");
+
+        Console.WriteLine();
+        Console.WriteLine("leave id empty to finish.");
+
+        var mealIngredients = new List<MealIngredientCreateDto>();
+
+        while (true)
+        {
+            Console.WriteLine();
+
+            int? ingredientId = ReadOptionalInt("id       : ");
+
+            if (ingredientId == null)
+            {
+                break;
+            }
+
+            decimal quantityUsed = ReadDecimal("quantity : ");
+
+            mealIngredients.Add(new MealIngredientCreateDto
+            {
+                QuantityUsed = quantityUsed,
+                IngredientId = ingredientId.Value
+            });
+        }
+
+        Console.WriteLine();
+
+        if (mealIngredients.Count == 0)
+        {
+            Console.WriteLine("no ingredients given. meal not added.");
+        }
+        else
+        {
+            var meal = new MealCreateDto
+            {
+                Servings = servings,
+                MealIngredients = mealIngredients,
+                Name = name
+            };
+
+            try
+            {
+                await mealService.AddAsync(meal);
+
+                Console.WriteLine("meal added.");
+            }
+            catch (HttpRequestException)
+            {
+                Console.WriteLine("could not add meal. check the ingredient ids and that the backend is running.");
+            }
+        }
+
+        Console.WriteLine();
+        Console.Write("press any key to continue...");
+        Console.ReadKey();
+    }
+
     private async Task ListIngredientsAsync()
     {
         Console.Clear();
@@ -137,6 +208,22 @@ public class TextUI(IngredientService ingredientService, MealService mealService
             }
 
             Console.WriteLine("enter a number of 0 or more.");
+        }
+    }
+
+    private static int ReadInt(string label)
+    {
+        while (true)
+        {
+            Console.Write(label);
+            string? input = Console.ReadLine();
+
+            if (int.TryParse(input, out int value) && value >= 1)
+            {
+                return value;
+            }
+
+            Console.WriteLine("enter a whole number of 1 or more.");
         }
     }
 
