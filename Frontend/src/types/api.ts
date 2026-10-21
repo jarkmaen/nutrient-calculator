@@ -63,9 +63,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["Ingredient"][];
-                        "application/json": components["schemas"]["Ingredient"][];
-                        "text/json": components["schemas"]["Ingredient"][];
+                        "text/plain": components["schemas"]["IngredientResponseDto"][];
+                        "application/json": components["schemas"]["IngredientResponseDto"][];
+                        "text/json": components["schemas"]["IngredientResponseDto"][];
                     };
                 };
             };
@@ -92,9 +92,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["Ingredient"];
-                        "application/json": components["schemas"]["Ingredient"];
-                        "text/json": components["schemas"]["Ingredient"];
+                        "text/plain": components["schemas"]["IngredientResponseDto"];
+                        "application/json": components["schemas"]["IngredientResponseDto"];
+                        "text/json": components["schemas"]["IngredientResponseDto"];
                     };
                 };
             };
@@ -129,9 +129,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["Ingredient"];
-                        "application/json": components["schemas"]["Ingredient"];
-                        "text/json": components["schemas"]["Ingredient"];
+                        "text/plain": components["schemas"]["IngredientResponseDto"];
+                        "application/json": components["schemas"]["IngredientResponseDto"];
+                        "text/json": components["schemas"]["IngredientResponseDto"];
                     };
                 };
             };
@@ -260,22 +260,6 @@ export interface components {
             name: string;
             unit: string;
         };
-        Ingredient: {
-            /** Format: int32 */
-            id?: number;
-            /** Format: double */
-            energy?: number;
-            name: string;
-            /** Format: double */
-            price?: number;
-            /** Format: double */
-            quantity?: number;
-            /** Format: int32 */
-            usdaId?: null | number;
-            macro?: components["schemas"]["Macro"];
-            mineral?: components["schemas"]["Mineral"];
-            vitamin?: components["schemas"]["Vitamin"];
-        };
         IngredientCreateDto: {
             /** Format: double */
             carbohydrate?: number;
@@ -301,27 +285,16 @@ export interface components {
             usdaId?: null | number;
             name: string;
         };
-        Macro: {
+        IngredientResponseDto: {
+            /** Format: double */
+            price: number;
+            /** Format: double */
+            quantity: number;
             /** Format: int32 */
-            id?: number;
+            id: number;
             /** Format: int32 */
-            ingredientId?: number;
-            /** Format: double */
-            carbohydrate?: number;
-            /** Format: double */
-            fat?: number;
-            /** Format: double */
-            fiber?: number;
-            /** Format: double */
-            protein?: number;
-            /** Format: double */
-            saturatedFat?: number;
-            /** Format: double */
-            sugar?: number;
-            /** Format: double */
-            alphaLinolenicAcid?: null | number;
-            /** Format: double */
-            linoleicAcid?: null | number;
+            usdaId: null | number;
+            name: string;
         };
         MealCreateDto: {
             /** Format: int32 */
@@ -338,7 +311,7 @@ export interface components {
         MealIngredientResponseDto: {
             /** Format: double */
             quantityUsed: number;
-            ingredient: components["schemas"]["Ingredient"];
+            ingredient: components["schemas"]["IngredientResponseDto"];
         };
         MealResponseDto: {
             /** Format: double */
@@ -350,42 +323,6 @@ export interface components {
             mealIngredients: components["schemas"]["MealIngredientResponseDto"][];
             nutrients: components["schemas"]["NutrientDto"];
             name: string;
-        };
-        Mineral: {
-            /** Format: int32 */
-            id?: number;
-            /** Format: int32 */
-            ingredientId?: number;
-            /** Format: double */
-            chloride?: number;
-            /** Format: double */
-            sodium?: number;
-            /** Format: double */
-            calcium?: null | number;
-            /** Format: double */
-            chromium?: null | number;
-            /** Format: double */
-            copper?: null | number;
-            /** Format: double */
-            fluoride?: null | number;
-            /** Format: double */
-            iodine?: null | number;
-            /** Format: double */
-            iron?: null | number;
-            /** Format: double */
-            magnesium?: null | number;
-            /** Format: double */
-            manganese?: null | number;
-            /** Format: double */
-            molybdenum?: null | number;
-            /** Format: double */
-            phosphorus?: null | number;
-            /** Format: double */
-            potassium?: null | number;
-            /** Format: double */
-            selenium?: null | number;
-            /** Format: double */
-            zinc?: null | number;
         };
         NutrientDto: {
             /** Format: double */
@@ -464,40 +401,6 @@ export interface components {
             vitaminE: null | number;
             /** Format: double */
             vitaminK: null | number;
-        };
-        Vitamin: {
-            /** Format: int32 */
-            id?: number;
-            /** Format: int32 */
-            ingredientId?: number;
-            /** Format: double */
-            biotin?: null | number;
-            /** Format: double */
-            choline?: null | number;
-            /** Format: double */
-            folate?: null | number;
-            /** Format: double */
-            niacin?: null | number;
-            /** Format: double */
-            pantothenicAcid?: null | number;
-            /** Format: double */
-            riboflavin?: null | number;
-            /** Format: double */
-            thiamin?: null | number;
-            /** Format: double */
-            vitaminA?: null | number;
-            /** Format: double */
-            vitaminB12?: null | number;
-            /** Format: double */
-            vitaminB6?: null | number;
-            /** Format: double */
-            vitaminC?: null | number;
-            /** Format: double */
-            vitaminD?: null | number;
-            /** Format: double */
-            vitaminE?: null | number;
-            /** Format: double */
-            vitaminK?: null | number;
         };
     };
     responses: never;

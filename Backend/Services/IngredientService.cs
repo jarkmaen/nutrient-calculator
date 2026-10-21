@@ -1,6 +1,7 @@
 ﻿using Backend.Constants;
 using Backend.Data;
 using Backend.DTOs;
+using Backend.Mappers;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,7 @@ namespace Backend.Services;
 
 public class IngredientService(AppDbContext context, IUsdaService usdaService) : IIngredientService
 {
-    public async Task<Ingredient> AddAsync(IngredientCreateDto dto)
+    public async Task<IngredientResponseDto> AddAsync(IngredientCreateDto dto)
     {
         decimal chlorideFactor = 0.6066m;
         decimal sodiumFactor = 0.3934m;
@@ -89,24 +90,25 @@ public class IngredientService(AppDbContext context, IUsdaService usdaService) :
         context.Ingredients.Add(ingredient);
         await context.SaveChangesAsync();
 
-        return ingredient;
+        return ingredient.ToResponseDto();
     }
 
-    public async Task<Ingredient?> GetByIdAsync(int id)
+    public async Task<IngredientResponseDto?> GetByIdAsync(int id)
     {
-        return await context.Ingredients
-            .Include(i => i.Macro)
-            .Include(i => i.Mineral)
-            .Include(i => i.Vitamin)
-            .FirstOrDefaultAsync(i => i.Id == id);
+        var ingredient = await context.Ingredients.FirstOrDefaultAsync(i => i.Id == id);
+
+        if (ingredient == null)
+        {
+            return null;
+        }
+
+        return ingredient.ToResponseDto();
     }
 
-    public async Task<List<Ingredient>> GetAllAsync()
+    public async Task<List<IngredientResponseDto>> GetAllAsync()
     {
-        return await context.Ingredients
-            .Include(i => i.Macro)
-            .Include(i => i.Mineral)
-            .Include(i => i.Vitamin)
-            .ToListAsync();
+        var ingredients = await context.Ingredients.ToListAsync();
+
+        return [.. ingredients.Select(i => i.ToResponseDto())];
     }
 }

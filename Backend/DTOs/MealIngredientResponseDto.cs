@@ -1,5 +1,4 @@
-﻿using Backend.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Backend.DTOs;
 
@@ -9,5 +8,5 @@ public class MealIngredientResponseDto
     public decimal QuantityUsed { get; set; }
 
     [Required]
-    public Ingredient Ingredient { get; set; } = null!;
+    public IngredientResponseDto Ingredient { get; set; } = null!;
 }

@@ -1,5 +1,6 @@
 ﻿using Backend.Data;
 using Backend.DTOs;
+using Backend.Mappers;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +24,7 @@ public class MealService(AppDbContext context) : IMealService
             MealIngredients = [.. m.MealIngredients.Select(mI => new MealIngredientResponseDto
             {
                 QuantityUsed = mI.QuantityUsed,
-                Ingredient = mI.Ingredient
+                Ingredient = mI.Ingredient.ToResponseDto()
             })],
             Nutrients = CalculateNutrients(m),
             Name = m.Name
@@ -70,7 +71,7 @@ public class MealService(AppDbContext context) : IMealService
             MealIngredients = [.. meal.MealIngredients.Select(mI => new MealIngredientResponseDto
             {
                 QuantityUsed = mI.QuantityUsed,
-                Ingredient = mI.Ingredient
+                Ingredient = mI.Ingredient.ToResponseDto()
             })],
             Nutrients = CalculateNutrients(meal),
             Name = meal.Name
