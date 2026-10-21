@@ -9,7 +9,7 @@ Nutrient Calculator is a single-page app: select meals and see their combined ma
 - `NutrientCalculator.slnx` — .NET 10 solution with `Backend`, `CLI`, `Tests`.
 - `Backend/` — ASP.NET Core Web API, EF Core code first, SQL Server.
 - `Frontend/` — React 19, TypeScript, Vite, Tailwind v4, React Compiler. Not part of the solution.
-- `CLI/` — console app for adding and listing ingredients over HTTP.
+- `CLI/` — console app for adding ingredients and meals over HTTP.
 - `Tests/` — Reqnroll (Gherkin) on xUnit, referencing `Backend`.
 - `.agents/skills/` — `add-ingredient` (from a pasted product page) and `add-meal`.
 
@@ -71,7 +71,7 @@ Controller → Service (interface + implementation, scoped) → `AppDbContext`. 
 
 ### CLI
 
-A separate HTTP client with its own DTOs, not a reference to `Backend`. `Program.cs` reads `ApiBaseUrl` from `CLI/appsettings.json` and wires `HttpClient` → `IngredientService` → `TextUI`. `TextUI` validates input before sending.
+A separate HTTP client with its own DTOs, not a reference to `Backend`. `Program.cs` reads `ApiBaseUrl` from `CLI/appsettings.json` and passes one `HttpClient` to `IngredientService` and `MealService`, which `TextUI` uses. `TextUI` validates input before sending.
 
 ## Style
 
