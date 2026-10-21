@@ -19,8 +19,17 @@ public class MealService(AppDbContext context) : IMealService
         return [.. meals.Select(ToResponseDto)];
     }
 
-    public async Task<MealResponseDto> AddAsync(MealCreateDto dto)
+    public async Task<MealResponseDto?> AddAsync(MealCreateDto dto)
     {
+        var ingredientIds = dto.MealIngredients.Select(i => i.IngredientId).ToList();
+
+        int existingCount = await context.Ingredients.CountAsync(i => ingredientIds.Contains(i.Id));
+
+        if (existingCount != ingredientIds.Count)
+        {
+            return null;
+        }
+
         var meal = new Meal
         {
             Name = dto.Name,

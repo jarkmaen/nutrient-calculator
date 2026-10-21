@@ -19,6 +19,13 @@ public class MealsController(IMealService mealService) : ControllerBase
     {
         var createdMeal = await mealService.AddAsync(dto);
 
+        if (createdMeal == null)
+        {
+            ModelState.AddModelError(nameof(dto.MealIngredients), "Each ingredient must exist and be listed only once.");
+
+            return ValidationProblem(ModelState);
+        }
+
         return CreatedAtAction(nameof(GetById), new { id = createdMeal.Id }, createdMeal);
     }
 
