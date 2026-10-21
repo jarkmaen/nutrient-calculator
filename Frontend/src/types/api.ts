@@ -321,10 +321,10 @@ export interface components {
             /** Format: int32 */
             servings: number;
             mealIngredients: components["schemas"]["MealIngredientResponseDto"][];
-            nutrients: components["schemas"]["NutrientDto"];
+            nutrients: components["schemas"]["NutrientResponseDto"];
             name: string;
         };
-        NutrientDto: {
+        NutrientResponseDto: {
             /** Format: double */
             carbohydrate: number;
             /** Format: double */

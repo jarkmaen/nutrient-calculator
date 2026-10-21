@@ -2,7 +2,7 @@
 
 namespace Backend.DTOs;
 
-public class NutrientDto
+public class NutrientResponseDto
 {
     // Macros
     [Required]

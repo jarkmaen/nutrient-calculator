@@ -59,7 +59,7 @@ Controller → Service (interface + implementation, scoped) → `AppDbContext`. 
 - **`Constants/Nutrients.cs`** is the nutrient registry: name, unit, DRI (`Recommended`, `UpperLimit`) and USDA nutrient id. `DriService` returns every field with a DRI via reflection, so adding one changes `/api/dri` and the count in `Tests/Features/Dri.feature`. Entries without a DRI (`Pufa182`, `Pufa183`, `VitaminK1`, `VitaminK1Dihydro`, `VitaminK2`) exist only for USDA lookup.
 - **`IngredientService.AddAsync`:** macros, energy and salt come from the request. With a `UsdaId`, micronutrients and fatty acids are fetched from FoodData Central and matched by USDA nutrient id. ALA and LA fall back to PUFA 18:3 and 18:2; vitamin K is the sum of K1, K1 dihydro and K2. Salt is split into sodium and chloride. `UsdaService` returns `null` on any error.
 - **`MealService`:** scales each ingredient by `QuantityUsed / 100`, sums, and divides by `Servings`. Macros round to 2 dp, others to 4 dp. Nullable nutrients stay `null` when no ingredient has a value. Price per serving is `Price * QuantityUsed / Quantity`.
-- **New nutrient:** `Nutrients.cs`, the `Macro`/`Mineral`/`Vitamin` model + migration, `NutrientDto`, `IngredientService.AddAsync`, `MealService.CalculateNutrients`, and `Frontend/src/constants/nutrients.ts`.
+- **New nutrient:** `Nutrients.cs`, the `Macro`/`Mineral`/`Vitamin` model + migration, `NutrientResponseDto`, `IngredientService.AddAsync`, `MealService.CalculateNutrients`, and `Frontend/src/constants/nutrients.ts`.
 
 ### Frontend
 

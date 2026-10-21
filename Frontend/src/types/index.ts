@@ -15,6 +15,6 @@ export interface NutrientTotal {
 
 export type Dri = components["schemas"]["DriResponseDto"];
 export type Meal = components["schemas"]["MealResponseDto"];
-export type Nutrients = components["schemas"]["NutrientDto"];
+export type Nutrients = components["schemas"]["NutrientResponseDto"];
 
 export type NutrientState = "low" | "met" | "none" | "ok" | "over";

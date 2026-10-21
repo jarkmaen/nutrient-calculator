@@ -17,7 +17,7 @@ public class MealResponseDto
     public List<MealIngredientResponseDto> MealIngredients { get; set; } = [];
 
     [Required]
-    public NutrientDto Nutrients { get; set; } = new();
+    public NutrientResponseDto Nutrients { get; set; } = new();
 
     [Required]
     public string Name { get; set; } = string.Empty;

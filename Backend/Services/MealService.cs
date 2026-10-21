@@ -78,11 +78,11 @@ public class MealService(AppDbContext context) : IMealService
         };
     }
 
-    private static NutrientDto CalculateNutrients(Meal meal)
+    private static NutrientResponseDto CalculateNutrients(Meal meal)
     {
         static decimal? AddNullable(decimal? nutrient, decimal ratio, decimal? total) => nutrient.HasValue ? (total ?? 0) + (nutrient.Value * ratio) : total;
 
-        var nutrients = new NutrientDto();
+        var nutrients = new NutrientResponseDto();
 
         foreach (var mI in meal.MealIngredients)
         {
@@ -138,7 +138,7 @@ public class MealService(AppDbContext context) : IMealService
 
         static decimal? Round(decimal? value, int decimals) => value.HasValue ? Math.Round(value.Value, decimals) : null;
 
-        return new NutrientDto
+        return new NutrientResponseDto
         {
             Carbohydrate = Math.Round(nutrients.Carbohydrate / s, 2),
             Energy = Math.Round(nutrients.Energy / s, 2),
