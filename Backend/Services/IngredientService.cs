@@ -41,19 +41,20 @@ public class IngredientService(AppDbContext context, IUsdaService usdaService) :
             UsdaId = dto.UsdaId,
             Macro = new Macro
             {
-                AlphaLinolenicAcid = FindNutrient(Nutrients.AlphaLinolenicAcid) ?? FindNutrient(Nutrients.Pufa183),
                 Carbohydrate = dto.Carbohydrate,
                 Fat = dto.Fat,
                 Fiber = dto.Fiber,
-                LinoleicAcid = FindNutrient(Nutrients.LinoleicAcid) ?? FindNutrient(Nutrients.Pufa182),
                 Protein = dto.Protein,
                 SaturatedFat = dto.SaturatedFat,
-                Sugar = dto.Sugar
+                Sugar = dto.Sugar,
+                AlphaLinolenicAcid = FindNutrient(Nutrients.AlphaLinolenicAcid) ?? FindNutrient(Nutrients.Pufa183),
+                LinoleicAcid = FindNutrient(Nutrients.LinoleicAcid) ?? FindNutrient(Nutrients.Pufa182)
             },
             Mineral = new Mineral
             {
-                Calcium = FindNutrient(Nutrients.Calcium),
                 Chloride = dto.Salt * chlorideFactor * 1000,
+                Sodium = dto.Salt * sodiumFactor * 1000,
+                Calcium = FindNutrient(Nutrients.Calcium),
                 Chromium = null,
                 Copper = FindNutrient(Nutrients.Copper),
                 Fluoride = FindNutrient(Nutrients.Fluoride),
@@ -65,7 +66,6 @@ public class IngredientService(AppDbContext context, IUsdaService usdaService) :
                 Phosphorus = FindNutrient(Nutrients.Phosphorus),
                 Potassium = FindNutrient(Nutrients.Potassium),
                 Selenium = FindNutrient(Nutrients.Selenium),
-                Sodium = dto.Salt * sodiumFactor * 1000,
                 Zinc = FindNutrient(Nutrients.Zinc)
             },
             Vitamin = new Vitamin
