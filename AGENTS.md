@@ -54,11 +54,12 @@ Query the database with `sqlcmd -S localhost\SQLEXPRESS -d NutrientCalculator -E
 
 Controller → Service (interface + implementation, scoped) → `AppDbContext`. Routes: `/api/dri`, `/api/ingredients`, `/api/meals`.
 
+- **DTOs:** services and controllers return DTOs, never entities. Entity → DTO mappings used by more than one service are extension methods in `Mappers/` (`IngredientMapper.ToResponseDto()`). Every response DTO property has `[Required]`, nullable ones too, so generated types are `T | null` instead of optional.
 - **Model:** `Ingredient` has one `Macro`, `Mineral` and `Vitamin` row each. `Meal` links to ingredients through `MealIngredient` with `QuantityUsed` (g/ml). Decimals are `(19, 8)`.
 - **Values are per 100 g/ml.** `Ingredient.Quantity` and `Price` are the package size and price.
 - **`Constants/Nutrients.cs`** is the nutrient registry: name, unit, DRI (`Recommended`, `UpperLimit`) and USDA nutrient id. `DriService` returns every field with a DRI via reflection, so adding one changes `/api/dri` and the count in `Tests/Features/Dri.feature`. Entries without a DRI (`Pufa182`, `Pufa183`, `VitaminK1`, `VitaminK1Dihydro`, `VitaminK2`) exist only for USDA lookup.
 - **`IngredientService.AddAsync`:** macros, energy and salt come from the request. With a `UsdaId`, micronutrients and fatty acids are fetched from FoodData Central and matched by USDA nutrient id. ALA and LA fall back to PUFA 18:3 and 18:2; vitamin K is the sum of K1, K1 dihydro and K2. Salt is split into sodium and chloride. `UsdaService` returns `null` on any error.
-- **`MealService`:** scales each ingredient by `QuantityUsed / 100`, sums, and divides by `Servings`. Macros round to 2 dp, others to 4 dp. Nullable nutrients stay `null` when no ingredient has a value. Price per serving is `Price * QuantityUsed / Quantity`.
+- **`MealService`:** scales each ingredient by `QuantityUsed / 100`, sums, and divides by `Servings`. Macros round to 2 dp, others to 4 dp. Nullable nutrients stay `null` when no ingredient has a value. Price per serving is `Price * QuantityUsed / Quantity`. `AddAsync` returns `null` when an ingredient id doesn't exist or repeats, and the controller answers 400.
 - **New nutrient:** `Nutrients.cs`, the `Macro`/`Mineral`/`Vitamin` model + migration, `NutrientResponseDto`, `IngredientService.AddAsync`, `MealService.CalculateNutrients`, and `Frontend/src/constants/nutrients.ts`.
 
 ### Frontend
@@ -76,9 +77,11 @@ A separate HTTP client with its own DTOs, not a reference to `Backend`. `Program
 ## Style
 
 - CRLF line endings.
-- Alphabetical order for imports, usings, object properties, JSX props, JSON keys, CSS properties and Tailwind classes (`md:` classes sort by full string).
+- Alphabetical order for imports, usings, TS object properties, JSX props, JSON keys, CSS properties and Tailwind classes (`md:` classes sort by full string).
 - Models: `Id`, foreign keys, required properties A–Z, nullable properties A–Z, navigation properties.
-- DTOs: by type, then name.
+- DTO properties and interface methods: by type, then name (case-insensitive, e.g. `decimal` < `int` < `List<…>` < `string`).
+- Class methods: public, then private instance, then private static; each group by type, then name.
+- C# object initializers follow the class's declaration order.
 - C#: `var` for objects and explicit types for primitives, primary constructors for DI, file-scoped namespaces, collection expressions.
 - Prettier: 4-space indent, no trailing commas.
 - Commits: conventional (`feat`, `fix`, `refactor`, `chore`, `docs`, `style`), short, no commas.
