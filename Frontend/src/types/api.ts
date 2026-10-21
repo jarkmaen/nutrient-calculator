@@ -326,16 +326,16 @@ export interface components {
         MealCreateDto: {
             /** Format: int32 */
             servings?: number;
-            mealIngredients?: components["schemas"]["MealIngredientCreate"][];
+            mealIngredients?: components["schemas"]["MealIngredientCreateDto"][];
             name: string;
         };
-        MealIngredientCreate: {
+        MealIngredientCreateDto: {
             /** Format: double */
             quantityUsed?: number;
             /** Format: int32 */
             ingredientId?: number;
         };
-        MealIngredientResponse: {
+        MealIngredientResponseDto: {
             /** Format: double */
             quantityUsed: number;
             ingredient: components["schemas"]["Ingredient"];
@@ -347,7 +347,7 @@ export interface components {
             id: number;
             /** Format: int32 */
             servings: number;
-            mealIngredients: components["schemas"]["MealIngredientResponse"][];
+            mealIngredients: components["schemas"]["MealIngredientResponseDto"][];
             nutrients: components["schemas"]["NutrientDto"];
             name: string;
         };

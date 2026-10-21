@@ -1,5 +1,4 @@
-﻿using Backend.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Backend.DTOs;
 
@@ -15,20 +14,11 @@ public class MealResponseDto
     public int Servings { get; set; }
 
     [Required]
-    public List<MealIngredientResponse> MealIngredients { get; set; } = [];
+    public List<MealIngredientResponseDto> MealIngredients { get; set; } = [];
 
     [Required]
     public NutrientDto Nutrients { get; set; } = new();
 
     [Required]
     public string Name { get; set; } = string.Empty;
-}
-
-public class MealIngredientResponse
-{
-    [Required]
-    public decimal QuantityUsed { get; set; }
-
-    [Required]
-    public Ingredient Ingredient { get; set; } = null!;
 }

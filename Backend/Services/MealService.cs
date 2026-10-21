@@ -20,7 +20,7 @@ public class MealService(AppDbContext context) : IMealService
             Price = CalculatePrice(m),
             Id = m.Id,
             Servings = m.Servings,
-            MealIngredients = [.. m.MealIngredients.Select(mI => new MealIngredientResponse
+            MealIngredients = [.. m.MealIngredients.Select(mI => new MealIngredientResponseDto
             {
                 QuantityUsed = mI.QuantityUsed,
                 Ingredient = mI.Ingredient
@@ -67,7 +67,7 @@ public class MealService(AppDbContext context) : IMealService
             Price = CalculatePrice(meal),
             Id = meal.Id,
             Servings = meal.Servings,
-            MealIngredients = [.. meal.MealIngredients.Select(mI => new MealIngredientResponse
+            MealIngredients = [.. meal.MealIngredients.Select(mI => new MealIngredientResponseDto
             {
                 QuantityUsed = mI.QuantityUsed,
                 Ingredient = mI.Ingredient
