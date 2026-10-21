@@ -16,19 +16,7 @@ public class MealService(AppDbContext context) : IMealService
             .Include(m => m.MealIngredients).ThenInclude(mI => mI.Ingredient).ThenInclude(i => i.Vitamin)
             .ToListAsync();
 
-        return [.. meals.Select(m => new MealResponseDto
-        {
-            Price = CalculatePrice(m),
-            Id = m.Id,
-            Servings = m.Servings,
-            MealIngredients = [.. m.MealIngredients.Select(mI => new MealIngredientResponseDto
-            {
-                QuantityUsed = mI.QuantityUsed,
-                Ingredient = mI.Ingredient.ToResponseDto()
-            })],
-            Nutrients = CalculateNutrients(m),
-            Name = m.Name
-        })];
+        return [.. meals.Select(ToResponseDto)];
     }
 
     public async Task<MealResponseDto> AddAsync(MealCreateDto dto)
@@ -63,6 +51,20 @@ public class MealService(AppDbContext context) : IMealService
             return null;
         }
 
+        return ToResponseDto(meal);
+    }
+
+    private static decimal CalculatePrice(Meal meal)
+    {
+        decimal total = meal.MealIngredients
+            .Where(mI => mI.Ingredient.Quantity > 0)
+            .Sum(mI => mI.Ingredient.Price * mI.QuantityUsed / mI.Ingredient.Quantity);
+
+        return Math.Round(total / meal.Servings, 2);
+    }
+
+    private static MealResponseDto ToResponseDto(Meal meal)
+    {
         return new MealResponseDto
         {
             Price = CalculatePrice(meal),
@@ -183,14 +185,5 @@ public class MealService(AppDbContext context) : IMealService
             VitaminE = Round(nutrients.VitaminE / s, 4),
             VitaminK = Round(nutrients.VitaminK / s, 4)
         };
-    }
-
-    private static decimal CalculatePrice(Meal meal)
-    {
-        decimal total = meal.MealIngredients
-            .Where(mI => mI.Ingredient.Quantity > 0)
-            .Sum(mI => mI.Ingredient.Price * mI.QuantityUsed / mI.Ingredient.Quantity);
-
-        return Math.Round(total / meal.Servings, 2);
     }
 }
