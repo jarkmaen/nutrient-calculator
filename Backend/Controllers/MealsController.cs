@@ -8,6 +8,12 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class MealsController(IMealService mealService) : ControllerBase
 {
+    [HttpGet]
+    public async Task<ActionResult<List<MealResponseDto>>> GetAll()
+    {
+        return await mealService.GetAllAsync();
+    }
+
     [HttpPost]
     public async Task<ActionResult<MealResponseDto>> Create(MealCreateDto dto)
     {
@@ -27,11 +33,5 @@ public class MealsController(IMealService mealService) : ControllerBase
         }
 
         return meal;
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<List<MealResponseDto>>> GetAll()
-    {
-        return await mealService.GetAllAsync();
     }
 }
