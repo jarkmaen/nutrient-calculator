@@ -1,2 +1,3 @@
+*.feature.cs
 bin/
 obj/
