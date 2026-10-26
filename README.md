@@ -35,7 +35,7 @@ graph LR
 - **Frontend:** React, Tailwind
 - **Backend:** ASP.NET Core, Entity Framework Core, REST API
 - **Database:** SQL Server
-- **Other:** C#, TypeScript
+- **Other:** C#, Reqnroll, TypeScript
 
 ## Screenshots
 
