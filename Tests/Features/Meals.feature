@@ -82,3 +82,25 @@ Scenario: Nutrients are summed from the ingredients that have a value
 	Then the meal has
 		| Nutrient | Amount |
 		| Calcium  | 240    |
+
+@meals
+Scenario: Meals with a missing ingredient are rejected
+	Given the ingredients
+		| Name |
+		| Oats |
+	When I add a meal of 1 serving using these quantities
+		| Ingredient | QuantityUsed |
+		| Oats       | 50           |
+		| Rice       | 100          |
+	Then the meal is rejected
+
+@meals
+Scenario: Meals with a repeated ingredient are rejected
+	Given the ingredients
+		| Name |
+		| Oats |
+	When I add a meal of 1 serving using these quantities
+		| Ingredient | QuantityUsed |
+		| Oats       | 50           |
+		| Oats       | 100          |
+	Then the meal is rejected

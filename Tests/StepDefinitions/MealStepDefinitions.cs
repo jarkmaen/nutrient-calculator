@@ -31,12 +31,12 @@ public sealed class MealStepDefinitions(FakeUsdaService usdaService, TestDatabas
 
         foreach (var row in table.Rows)
         {
-            var ingredient = await database.Context.Ingredients.SingleAsync(i => i.Name == row["Ingredient"]);
+            var ingredient = await database.Context.Ingredients.SingleOrDefaultAsync(i => i.Name == row["Ingredient"]);
 
             mealIngredients.Add(new MealIngredientCreateDto
             {
                 QuantityUsed = decimal.Parse(row["QuantityUsed"], CultureInfo.InvariantCulture),
-                IngredientId = ingredient.Id
+                IngredientId = ingredient?.Id ?? int.MaxValue
             });
         }
 
@@ -64,5 +64,12 @@ public sealed class MealStepDefinitions(FakeUsdaService usdaService, TestDatabas
 
             Assert.Equal(expected, actual);
         }
+    }
+
+    [Then("the meal is rejected")]
+    public async Task ThenTheMealIsRejected()
+    {
+        Assert.Null(meal);
+        Assert.False(await database.Context.Meals.AnyAsync());
     }
 }
