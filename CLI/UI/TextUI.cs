@@ -1,4 +1,4 @@
-﻿using CLI.DTOs;
+using CLI.DTOs;
 using CLI.Services;
 using System.Globalization;
 
@@ -49,7 +49,7 @@ public class TextUI(IngredientService ingredientService, MealService mealService
 
         int? usdaId = ReadOptionalInt("usda id  : ");
         string name = ReadString("name     : ");
-        decimal quantity = ReadDecimal("quantity : ");
+        decimal quantity = ReadPositiveDecimal("quantity : ");
         decimal price = ReadDecimal("price    : ");
 
         Console.WriteLine();
@@ -208,6 +208,22 @@ public class TextUI(IngredientService ingredientService, MealService mealService
             }
 
             Console.WriteLine("enter a number of 0 or more.");
+        }
+    }
+
+    private static decimal ReadPositiveDecimal(string label)
+    {
+        while (true)
+        {
+            Console.Write(label);
+            string? input = Console.ReadLine()?.Replace(',', '.');
+
+            if (decimal.TryParse(input, CultureInfo.InvariantCulture, out decimal value) && value > 0)
+            {
+                return value;
+            }
+
+            Console.WriteLine("enter a number above 0.");
         }
     }
 

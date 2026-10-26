@@ -16,7 +16,7 @@ public sealed class MealStepDefinitions(FakeUsdaService usdaService, TestDatabas
     {
         var ingredientService = new IngredientService(database.Context, usdaService);
 
-        foreach (var dto in table.CreateSet<IngredientCreateDto>())
+        foreach (var dto in table.CreateSet(() => new IngredientCreateDto { Quantity = 100 }))
         {
             await ingredientService.AddAsync(dto);
         }

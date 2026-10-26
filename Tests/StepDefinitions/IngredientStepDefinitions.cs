@@ -71,6 +71,7 @@ public sealed class IngredientStepDefinitions(FakeUsdaService usdaService, TestD
 
         await ingredientService.AddAsync(new IngredientCreateDto
         {
+            Quantity = 100,
             Salt = salt,
             UsdaId = usdaId,
             Name = "Test ingredient"

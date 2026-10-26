@@ -1,4 +1,4 @@
-﻿using Backend.Data;
+using Backend.Data;
 using Backend.DTOs;
 using Backend.Mappers;
 using Backend.Models;
@@ -65,9 +65,7 @@ public class MealService(AppDbContext context) : IMealService
 
     private static decimal CalculatePrice(Meal meal)
     {
-        decimal total = meal.MealIngredients
-            .Where(mI => mI.Ingredient.Quantity > 0)
-            .Sum(mI => mI.Ingredient.Price * mI.QuantityUsed / mI.Ingredient.Quantity);
+        decimal total = meal.MealIngredients.Sum(mI => mI.Ingredient.Price * mI.QuantityUsed / mI.Ingredient.Quantity);
 
         return Math.Round(total / meal.Servings, 2);
     }
