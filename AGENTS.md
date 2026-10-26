@@ -56,8 +56,8 @@ Controller → Service (interface + implementation, scoped) → `AppDbContext`. 
 
 - **DTOs:** services and controllers return DTOs, never entities. Entity → DTO mappings used by more than one service are extension methods in `Mappers/` (`IngredientMapper.ToResponseDto()`). Every response DTO property has `[Required]`, nullable ones too, so generated types are `T | null` instead of optional.
 - **Model:** `Ingredient` has one `Macro`, `Mineral` and `Vitamin` row each. `Meal` links to ingredients through `MealIngredient` with `QuantityUsed` (g/ml). Decimals are `(19, 8)`.
-- **Values are per 100 g/ml.** `Ingredient.Quantity` and `Price` are the package size and price.
-- **`Constants/Nutrients.cs`** is the nutrient registry: name, unit, DRI (`Recommended`, `UpperLimit`) and USDA nutrient id. `DriService` returns every field with a DRI via reflection, so adding one changes `/api/dri` and the count in `Tests/Features/Dri.feature`. Entries without a DRI (`Pufa182`, `Pufa183`, `VitaminK1`, `VitaminK1Dihydro`, `VitaminK2`) exist only for USDA lookup.
+- **Values are per 100 g/ml.** `Ingredient.Quantity` and `Price` are the package size (above 0) and price.
+- **`Constants/Nutrients.cs`** is the nutrient registry: name, unit, DRI (`Recommended`, `UpperLimit`) and USDA nutrient id. `DriService` returns every field with a DRI via reflection, and `Tests/Features/Dri.feature` requires the DRI keys to match the `NutrientResponseDto` properties. Entries without a DRI (`Pufa182`, `Pufa183`, `VitaminK1`, `VitaminK1Dihydro`, `VitaminK2`) exist only for USDA lookup.
 - **`IngredientService.AddAsync`:** macros, energy and salt come from the request. With a `UsdaId`, micronutrients and fatty acids are fetched from FoodData Central and matched by USDA nutrient id. ALA and LA fall back to PUFA 18:3 and 18:2; vitamin K is the sum of K1, K1 dihydro and K2. Salt is split into sodium and chloride. `UsdaService` returns `null` on any error.
 - **`MealService`:** scales each ingredient by `QuantityUsed / 100`, sums, and divides by `Servings`. Macros round to 2 dp, others to 4 dp. Nullable nutrients stay `null` when no ingredient has a value. Price per serving is `Price * QuantityUsed / Quantity`. `AddAsync` returns `null` when an ingredient id doesn't exist or repeats, and the controller answers 400.
 - **New nutrient:** `Nutrients.cs`, the `Macro`/`Mineral`/`Vitamin` model + migration, `NutrientResponseDto`, `IngredientService.AddAsync`, `MealService.CalculateNutrients`, and `Frontend/src/constants/nutrients.ts`.
@@ -74,6 +74,15 @@ Controller → Service (interface + implementation, scoped) → `AppDbContext`. 
 
 A separate HTTP client with its own DTOs, not a reference to `Backend`. `Program.cs` reads `ApiBaseUrl` from `CLI/appsettings.json` and passes one `HttpClient` to `IngredientService` and `MealService`, which `TextUI` uses. `TextUI` validates input before sending.
 
+### Tests
+
+Feature files in `Features/` cover DRI, ingredients and meals; step definitions in `StepDefinitions/` call the real services.
+
+- `Support/TestDatabase` is an in-memory SQLite `AppDbContext`; `Support/FakeUsdaService` returns the `Response` set by `Given USDA has`. Reqnroll injects both per scenario.
+- Services are called directly, so DTO validation attributes and controllers are not covered.
+- Nutrient tables use property names (`VitaminC`) and `null` for an expected null. Ingredient tables map onto `IngredientCreateDto` with `CreateSet`, `Quantity` defaulting to 100.
+- `*.feature.cs` files are generated at build and ignored by git.
+
 ## Style
 
 - CRLF line endings.
@@ -82,6 +91,8 @@ A separate HTTP client with its own DTOs, not a reference to `Backend`. `Program
 - DTO properties and interface methods: by type, then name (case-insensitive, e.g. `decimal` < `int` < `List<…>` < `string`).
 - Class methods: public, then private instance, then private static; each group by type, then name.
 - C# object initializers follow the class's declaration order.
+- Gherkin: tab indent, scenarios in logical order, table key column first, then other columns and rows A–Z.
+- Step definition methods: Given, When, Then, each A–Z, then private helpers.
 - C#: `var` for objects and explicit types for primitives, primary constructors for DI, file-scoped namespaces, collection expressions.
 - Prettier: 4-space indent, no trailing commas.
-- Commits: conventional (`feat`, `fix`, `refactor`, `chore`, `docs`, `style`), short, no commas.
+- Commits: conventional (`feat`, `fix`, `refactor`, `chore`, `docs`, `style`, `test`), short, no commas.
